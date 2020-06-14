@@ -1,8 +1,7 @@
+import javafx.util.Pair;
+
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class BookReader {
     private File book_file;
@@ -61,6 +60,60 @@ public class BookReader {
     }
 
 
+    private boolean isPalindrome(String s) {
+        if (s.length() <= 2) return false;
+
+        int i = 0, j = s.length() - 1;
+
+        while (i < j) {
+            if (s.charAt(i) != s.charAt(j))
+                return false;
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+    public void findPalindromes() {
+        String[] allwords = this.content.split(" ");
+
+        HashSet<String> palidromes = new HashSet<>();
+
+        for (String str: allwords)
+            if (isPalindrome(str)) palidromes.add(str);
+
+
+        System.out.println("There are " + palidromes.size() + " palindromes words");
+    }
+
+    private boolean isAnagrams(String s1, String s2) {
+
+        if (s1.length() <= 1 || s2.length() <= 1) return false;
+        if (s1.length() != s2.length()) return false;
+
+        char[] ch1 = s1.toCharArray();
+        char[] ch2 = s2.toCharArray();
+
+        Arrays.sort(ch1);
+        Arrays.sort(ch2);
+
+        return Arrays.equals(ch1, ch2);
+    }
+
+    public void findAnagrams() {
+        String[] allwords = this.content.split(" ");
+        HashSet<Pair<String, String>> anagrams = new HashSet<>();
+
+        for (int i = 0; i < allwords.length - 1; i++) {
+            for (int j = i + 1; j < allwords.length; j++) {
+                if(isAnagrams(allwords[i], allwords[j])) anagrams.add(new Pair<>(allwords[i], allwords[j]));
+            }
+        }
+
+        System.out.println("There are " + anagrams.size() + " pair of anagram words");
+    }
+
+
 }
 
 class Start {
@@ -75,6 +128,8 @@ class Start {
         bookReader.letterFrequency();
         bookReader.longestWord();
         bookReader.countWord();
+        bookReader.findPalindromes();
+        bookReader.findAnagrams();
 
     }
 }
